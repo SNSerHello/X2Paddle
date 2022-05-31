@@ -34,6 +34,37 @@ tmp
         x2paddle_code.cpython-37.pyc
 ```
 
+## 转化ONNX模型 -> Paddle-Lite模型
+
+可以从[mobilenet ONNX](https://github.com/onnx/models/tree/main/vision/classification/mobilenet)下载mobilenetv2版本，比如说[mobilenetv2-12.onnx](https://github.com/onnx/models/blob/main/vision/classification/mobilenet/model/mobilenetv2-12.onnx)
+
+```
+$ wget https://github.com/onnx/models/blob/main/vision/classification/mobilenet/model/mobilenetv2-12.onnx
+$ x2paddle --model mobilenetv2-12.onnx --save_dir tmp --framework onnx --define_input_shape --to_lite True --lite_valid_places opencl --lite_model_type naive_buffer
+INFO:root:paddle.__version__ = 2.3.0
+INFO:root:Now translating model from onnx to paddle.
+model ir_version: 7, op version: 12
+Unknown shape for input tensor[tensor name: 'x2paddle_input'] -> shape: ['batch_size', 3, 224, 224], Please define shape of in
+put here,
+Note:you can use visualization tools like Netron to check input shape.
+Shape of Input(e.g. -1,3,224,224), enter 'N' to skip: -1,3,224,224
+$ tree /A /F tmp
+Folder PATH listing for volume Data
+Volume serial number is 00000002 0DE3:11B6
+TMP
+|   model.pdparams
+|   opt.nb
+|   x2paddle_code.py
+|
++---inference_model
+|       model.pdiparams
+|       model.pdiparams.info
+|       model.pdmodel
+|
+\---__pycache__
+        x2paddle_code.cpython-37.pyc
+```
+
 
 [![PyPI - X2Paddle Version](https://img.shields.io/pypi/v/x2paddle.svg?label=pip&logo=PyPI&logoColor=white)](https://pypi.org/project/x2paddle/)
 [![PyPI Status](https://pepy.tech/badge/x2paddle/month)](https://pepy.tech/project/x2paddle)
