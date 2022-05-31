@@ -1,5 +1,13 @@
 # X2Paddle
 
+## 搭建x2paddle环境
+
+```
+$ conda create -n py37_x2paddle2.x python=3.7
+$ pip3 install --upgrade ipython paddlepaddle tensorflow==1.14.0 onnx onnxruntime protobuf==3.20.1
+```
+
+
 [![PyPI - X2Paddle Version](https://img.shields.io/pypi/v/x2paddle.svg?label=pip&logo=PyPI&logoColor=white)](https://pypi.org/project/x2paddle/)
 [![PyPI Status](https://pepy.tech/badge/x2paddle/month)](https://pepy.tech/project/x2paddle)
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE)
