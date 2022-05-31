@@ -7,6 +7,33 @@ $ conda create -n py37_x2paddle2.x python=3.7
 $ pip3 install --upgrade ipython paddlepaddle tensorflow==1.14.0 onnx onnxruntime protobuf==3.20.1
 ```
 
+## 转化Tensorflow1.x模型 -> Paddle-Lite模型
+
+从[Tensorflow Slim](https://github.com/tensorflow/models/tree/master/research/slim)下载Tensorflow模型文件，比如说：[mobilenet_v1_1.0_224.tgz](http://download.tensorflow.org/models/mobilenet_v1_2018_02_22/mobilenet_v1_1.0_224.tgz)
+```
+$ wget http://download.tensorflow.org/models/mobilenet_v1_2018_02_22/mobilenet_v1_1.0_224.tgz
+$ tar xvzf mobilenet_v1_1.0_224.tgz
+$ x2paddle --model mobilenet_v1_1.0_224_frozen.pb --save_dir tmp --framework tensorflow --define_input_shape --to_lite True --lite_valid_places opencl --lite_model_type naive_buffer
+Define shape[now is [-1, 224, 224, 3]] for input tensor[tensor name: "input']
+Use your keyboard type the shape of input tensor below :)
+Shape of Input(e.g. None,224,224,3): None,224,224,3
+$ tree /A /F tmp
+Folder PATH listing for volume Data
+Volume serial number is 00000002 0DE3:11B6
+tmp
+|   model.pdparams
+|   opt.nb
+|   x2paddle_code.py
+|
++---inference_model
+|       model.pdiparams
+|       model.pdiparams.info
+|       model.pdmodel
+|
+\---__pycache__
+        x2paddle_code.cpython-37.pyc
+```
+
 
 [![PyPI - X2Paddle Version](https://img.shields.io/pypi/v/x2paddle.svg?label=pip&logo=PyPI&logoColor=white)](https://pypi.org/project/x2paddle/)
 [![PyPI Status](https://pepy.tech/badge/x2paddle/month)](https://pepy.tech/project/x2paddle)
