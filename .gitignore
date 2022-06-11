@@ -1,0 +1,4 @@
+build*
+x2paddle.egg-info*
+dist*
+*.pyc

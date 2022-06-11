@@ -1,10 +1,12 @@
 # X2Paddle
 
-## 搭建x2paddle环境
+## 搭建Anaconda3的x2paddle环境
 
 ```
-$ conda create -n py37_x2paddle2.x python=3.7
-$ pip3 install --upgrade ipython paddlepaddle tensorflow==1.14.0 onnx onnxruntime protobuf==3.20.1 sympy packaging
+$ conda create -n py37_x2paddle2.x python=3.7 ipython
+$ pip3 install --upgrade -r requirements.txt
+$ python3 setup.py bdist_wheel --universal
+$ pip3 install --upgrade dist/x2paddle-1.3.6-py2.py3-none-any.whl
 ```
 
 ## 转化Tensorflow1.x模型 -> Paddle-Lite模型
