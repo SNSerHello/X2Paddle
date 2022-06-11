@@ -538,12 +538,14 @@ class OpSet9():
             'pooled_width': pooled_width,
             'spatial_scale': spatial_scale,
             'sampling_ratio': sampling_ratio,
-            'rois_num': val_rois_num,
         }
         self.paddle_graph.add_layer(
-            'paddle.fluid.layers.roi_align',
-            inputs={'input': val_x.name,
-                    'rois': val_rois.name},
+            'custom_layer:ROIAlign',
+            inputs={
+                'input': val_x.name,
+                'rois': val_rois.name,
+                'rois_num': val_rois_num
+            },
             outputs=[node.name],
             **layer_attrs)
 
@@ -560,7 +562,7 @@ class OpSet9():
             'spatial_scale': spatial_scale,
         }
         self.paddle_graph.add_layer(
-            'paddle.fluid.layers.roi_pool',
+            'custom_layer:ROIPooling',
             inputs={'input': val_x.name,
                     'rois': val_rois.name},
             outputs=[node.name],
@@ -1880,30 +1882,13 @@ class OpSet9():
     @print_mapping_info
     def NonZero(self, node):
         val_x = self.graph.get_input_node(node, idx=0, copy=True)
-        val_x_dim = len(val_x.out_shapes[0])
-        if val_x_dim == 1:
-            self.paddle_graph.add_layer(
-                "paddle.nonzero",
-                inputs={"x": val_x.name},
-                outputs=[val_x.name])
-            self.paddle_graph.add_layer(
-                "paddle.transpose",
-                inputs={"x": val_x.name},
-                outputs=[node.layer_name],
-                perm=[1, 0])
-        if val_x_dim > 1:
-            self.paddle_graph.add_layer(
-                "paddle.nonzero",
-                inputs={"x": val_x.name},
-                outputs=[val_x.name])
-            self.paddle_graph.add_layer(
-                "paddle.split",
-                inputs={"x": val_x.name},
-                outputs=[val_x.name],
-                num_or_sections=1,
-                axis=val_x_dim)
-            self.paddle_graph.add_layer(
-                "paddle.concat", inputs={"x": val_x.name}, outputs=[node.name])
+        self.paddle_graph.add_layer(
+            "paddle.nonzero",
+            inputs={"x": val_x.name},
+            outputs=[val_x.name],
+            as_tuple=True)
+        self.paddle_graph.add_layer(
+            "paddle.concat", inputs={"x": val_x.name}, outputs=[node.name])
 
     @print_mapping_info
     def Identity(self, node):
