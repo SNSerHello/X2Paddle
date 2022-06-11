@@ -15,7 +15,13 @@ $ pip3 install --upgrade dist/x2paddle-1.3.6-py2.py3-none-any.whl
 ```
 $ wget http://download.tensorflow.org/models/mobilenet_v1_2018_02_22/mobilenet_v1_1.0_224.tgz
 $ tar xvzf mobilenet_v1_1.0_224.tgz
-$ x2paddle --model mobilenet_v1_1.0_224_frozen.pb --save_dir tmp --framework tensorflow --define_input_shape --to_lite True --lite_valid_places opencl --lite_model_type naive_buffer
+$ x2paddle --model mobilenet_v1_1.0_224_frozen.pb \
+        --save_dir tmp \
+        --framework tensorflow \
+        --define_input_shape \
+        --to_lite True \
+        --lite_valid_places opencl \
+        --lite_model_type naive_buffer
 Define shape[now is [-1, 224, 224, 3]] for input tensor[tensor name: "input']
 Use your keyboard type the shape of input tensor below :)
 Shape of Input(e.g. None,224,224,3): None,224,224,3
@@ -42,7 +48,13 @@ tmp
 
 ```
 $ wget https://github.com/onnx/models/blob/main/vision/classification/mobilenet/model/mobilenetv2-12.onnx
-$ x2paddle --model mobilenetv2-12.onnx --save_dir tmp --framework onnx --define_input_shape --to_lite True --lite_valid_places opencl --lite_model_type naive_buffer
+$ x2paddle --model mobilenetv2-12.onnx \
+        --save_dir tmp \
+        --framework onnx \
+        --define_input_shape \
+        --to_lite True \
+        --lite_valid_places opencl \
+        --lite_model_type naive_buffer
 INFO:root:paddle.__version__ = 2.3.0
 INFO:root:Now translating model from onnx to paddle.
 model ir_version: 7, op version: 12
