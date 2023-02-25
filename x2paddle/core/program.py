@@ -21,6 +21,7 @@ import sys
 import os
 import six
 import pickle
+import importlib
 from os import path as osp
 from x2paddle.core.util import *
 
@@ -259,7 +260,7 @@ class PaddleGraph(object):
 
         return update(self.layers)
 
-    def gen_model(self, save_dir, jit_type=None, enable_code_optim=True):
+    def gen_model(self, save_dir, jit_type=None, enable_code_optim=False):
         if not osp.exists(save_dir):
             os.makedirs(save_dir)
         if jit_type == "trace":
@@ -566,6 +567,8 @@ class PaddleGraph(object):
         path = osp.abspath(save_dir)
         sys.path.insert(0, save_dir)
         import x2paddle_code
+        # Solve the problem of function overloading caused by traversing the model
+        importlib.reload(x2paddle_code)
         paddle.disable_static()
         restore = paddle.load(osp.join(save_dir, "model.pdparams"))
         model = getattr(x2paddle_code, self.name)()

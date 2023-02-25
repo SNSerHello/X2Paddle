@@ -74,6 +74,13 @@ def arg_parser():
         default=False,
         help="define input shape for tf model")
     parser.add_argument(
+       "--input_shape_dict",
+       "-isd",
+       type=_text_type,
+       default=None,
+       help="define input shapes, e.g --input_shape_dict=\"{'image':[1, 3, 608, 608]}\" or" \
+       "--input_shape_dict=\"{'image':[1, 3, 608, 608], 'im_shape': [1, 2], 'scale_factor': [1, 2]}\"")
+    parser.add_argument(
         "--convert_torch_project",
         "-tp",
         action='store_true',
@@ -93,8 +100,13 @@ def arg_parser():
     parser.add_argument(
         "--enable_code_optim",
         "-co",
-        default=True,
+        default=False,
         help="Turn on code optimization")
+    parser.add_argument(
+        "--enable_onnx_checker",
+        "-oc",
+        default=True,
+        help="Turn on onnx model checker")
     parser.add_argument(
         "--disable_feedback",
         "-df",
@@ -196,7 +208,7 @@ def tf2paddle(model_path,
     logging.info("================================================")
     logging.info("")
     logging.info(
-        "Model Convertd! Fill this survey to help X2Paddle better, https://iwenjuan.baidu.com/?code=npyd51 "
+        "Model Converted! Fill this survey to help X2Paddle better, https://iwenjuan.baidu.com/?code=npyd51 "
     )
     logging.info("")
     logging.info("================================================")
@@ -252,7 +264,7 @@ def caffe2paddle(proto_file,
     logging.info("================================================")
     logging.info("")
     logging.info(
-        "Model Convertd! Fill this survey to help X2Paddle better, https://iwenjuan.baidu.com/?code=npyd51 "
+        "Model Converted! Fill this survey to help X2Paddle better, https://iwenjuan.baidu.com/?code=npyd51 "
     )
     logging.info("")
     logging.info("================================================")
@@ -260,10 +272,12 @@ def caffe2paddle(proto_file,
 
 def onnx2paddle(model_path,
                 save_dir,
+                input_shape_dict=None,
                 convert_to_lite=False,
                 lite_valid_places="arm",
                 lite_model_type="naive_buffer",
-                disable_feedback=False):
+                disable_feedback=False,
+                enable_onnx_checker=True):
     # for convert_id
     time_info = int(time.time())
     if not disable_feedback:
@@ -286,7 +300,7 @@ def onnx2paddle(model_path,
 
     from x2paddle.decoder.onnx_decoder import ONNXDecoder
     from x2paddle.op_mapper.onnx2paddle.onnx_op_mapper import ONNXOpMapper
-    model = ONNXDecoder(model_path)
+    model = ONNXDecoder(model_path, enable_onnx_checker, input_shape_dict)
     mapper = ONNXOpMapper(model)
     mapper.paddle_graph.build()
     logging.info("Model optimizing ...")
@@ -313,7 +327,7 @@ def onnx2paddle(model_path,
     logging.info("================================================")
     logging.info("")
     logging.info(
-        "Model Convertd! Fill this survey to help X2Paddle better, https://iwenjuan.baidu.com/?code=npyd51 "
+        "Model Converted! Fill this survey to help X2Paddle better, https://iwenjuan.baidu.com/?code=npyd51 "
     )
     logging.info("")
     logging.info("================================================")
@@ -323,7 +337,7 @@ def pytorch2paddle(module,
                    save_dir,
                    jit_type="trace",
                    input_examples=None,
-                   enable_code_optim=True,
+                   enable_code_optim=False,
                    convert_to_lite=False,
                    lite_valid_places="arm",
                    lite_model_type="naive_buffer",
@@ -392,7 +406,7 @@ def pytorch2paddle(module,
     logging.info("================================================")
     logging.info("")
     logging.info(
-        "Model Convertd! Fill this survey to help X2Paddle better, https://iwenjuan.baidu.com/?code=npyd51 "
+        "Model Converted! Fill this survey to help X2Paddle better, https://iwenjuan.baidu.com/?code=npyd51 "
     )
     logging.info("")
     logging.info("================================================")
@@ -475,10 +489,12 @@ def main():
             onnx2paddle(
                 args.model,
                 args.save_dir,
+                input_shape_dict=args.input_shape_dict,
                 convert_to_lite=args.to_lite,
                 lite_valid_places=args.lite_valid_places,
                 lite_model_type=args.lite_model_type,
-                disable_feedback=args.disable_feedback)
+                disable_feedback=args.disable_feedback,
+                enable_onnx_checker=args.enable_onnx_checker)
         elif args.framework == "paddle2onnx":
             logging.info(
                 "Paddle to ONNX tool has been migrated to the new github: https://github.com/PaddlePaddle/paddle2onnx"

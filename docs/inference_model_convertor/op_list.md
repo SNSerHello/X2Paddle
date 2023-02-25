@@ -1,5 +1,5 @@
 # X2Paddle支持OP列表
-> 目前X2Paddle支持90+的TensorFlow OP，30+的Caffe Layer，80+的ONNX OP，120+的PyTorch Aten，10+的PyTorch Prim覆盖了大部分CV分类模型常用的操作。我们在如下列表中给出了目前X2Paddle支持的全部OP。
+> 目前X2Paddle支持90+ TensorFlow OP，30+ Caffe OP，90+ ONNX OP，130+ PyTorch OP，覆盖了大部分CV分类模型常用的操作。我们在如下列表中给出了目前X2Paddle支持的全部OP。
 
 **注：** 目前，部分OP暂未支持，如您在转换过程中出现OP不支持的情况，可自行添加或反馈给我们。欢迎通过[ISSUE反馈](https://github.com/PaddlePaddle/X2Paddle/issues/new)的方式告知我们(模型名，代码实现或模型获取方式)，我们会及时跟进：）
 
@@ -76,7 +76,7 @@
 | 81 | Add | 82 | Concat | 83 | Max | 84 | Min |
 | 85 | GreaterOrEqual | 86 | GatherND | 87 | And | 88 | cos |
 | 89 | Neg | 90 | SpaceToDepth | 91 | GatherElement | 92 | Sin |
-| 93 | CumSum |  |  |  |  |  |  |
+| 93 | CumSum | 94 | Or | 95 | Xor | 96 | Mod |
 
 ## PyTorch
 
@@ -117,7 +117,8 @@ Aten:
 | 125 | aten::complex | 126 | aten::real | 127 | aten::imag | 128 | aten::fft\_rfftn |
 | 129 | aten::fft\_irfftn | 130 | aten::hardsigmoid | 131 | aten::hardswish | 132 | aten::linear |
 | 133 | aten::rsqrt | 134 | aten::replication\_pad1d | 135 | aten::full | 136 | aten::group\_norm |
-| 137 | aten::argmax | 138 | aten::copy | 139 | aten::upsample\_trilinear3d |  |  |
+| 137 | aten::argmax | 138 | aten::copy | 139 | aten::upsample\_trilinear3d | 140 | aten::clone |
+| 141 | aten::rand | 142 | aten::randn |  |  |  |  |
 
 Prim:
 | 序号 | OP | 序号 | OP | 序号 | OP | 序号 | OP |
